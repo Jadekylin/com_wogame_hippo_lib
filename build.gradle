@@ -1,0 +1,64 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+    buildToolsVersion PROP_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion PROP_MIN_SDK_VERSION
+        targetSdkVersion PROP_TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+            jniLibs.srcDirs =  ['libs']
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:support-v4:28.0.0'
+
+    //准备要支持安卓手机5.x以下的，可以用okhttp:3.12.8。
+    //implementation 'com.squareup.okhttp3:okhttp:3.12.8'
+    //准备要支持是5.x以上的建议okhttp:4.3.1。
+    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+
+    // 广告相关依赖
+    api(name: 'hippo-ad-sdk-v1.2.5', ext: 'aar')
+    implementation(name: 'bdtracker-3.3.4-alpha.1-pangolin', ext: 'aar')
+    implementation(name: 'open_ad_sdk-v2.7.5.2', ext: 'aar')
+    implementation(name: 'android-gif-drawable-1.2.6', ext: 'aar')
+    implementation(name: 'GameSdk-v102', ext: 'aar')
+    implementation(name: 'aweme-open-sdk', ext: 'aar')
+
+    implementation project(path: ':com_wogame_common_lib')
+}
